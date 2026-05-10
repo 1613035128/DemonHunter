@@ -1,0 +1,39 @@
+# Unreal Engine 5 - .gitignore
+
+# Visual Studio
+.vs/
+*.user
+*.sln.DotSettings.user
+
+# Rider
+.idea/
+
+# Binaries
+Binaries/
+
+# DerivedDataCache
+DerivedDataCache/
+
+# Intermediate
+Intermediate/
+
+# Saved
+Saved/
+
+# DeepSeek TUI
+.deepseek/
+
+# Mac
+*.dSYM
+*.xcodeproj
+*.xcworkspace
+
+# Content - ignore source art files (keep .uasset and .umap)
+# Content/**/*.fbx
+# Content/**/*.psd
+# Content/**/*.tga
+# Content/**/*.png
+
+# Plugins - ignore plugin binaries / intermediate
+Plugins/*/Binaries/
+Plugins/*/Intermediate/
