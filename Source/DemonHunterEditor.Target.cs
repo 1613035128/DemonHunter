@@ -10,6 +10,6 @@ public class DemonHunterEditorTarget : TargetRules
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V6;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_7;
-		ExtraModuleNames.Add("DemonHunter");
+		ExtraModuleNames.AddRange(new string[]{"DemonHunter", "DemonHunterEditor"});
 	}
 }

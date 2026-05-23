@@ -12,6 +12,12 @@ void AHunterPlayerController::BeginPlay()
 	{
 		InputLocalPlayerSubsystem->AddMappingContext(InputMapping.Get(), 10);
 	}
+	
+	if (HunterActorClass)
+	{
+		HunterActor = GetWorld()->SpawnActor<AHunterActor>(HunterActorClass);
+	}
+	
 }
 
 void AHunterPlayerController::SetupInputComponent()

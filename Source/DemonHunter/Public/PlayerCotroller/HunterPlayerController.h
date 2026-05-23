@@ -6,6 +6,7 @@
 #include "InputMappingContext.h"
 #include "Data/InputConfigData.h"
 #include "GameFramework/PlayerController.h"
+#include "HunterActor/HunterActor.h"
 #include "HunterPlayerController.generated.h"
 
 /**
@@ -22,17 +23,6 @@ protected:
 	virtual void SetupInputComponent() override;
 	
 	void InitInput();
-public:
-	
-protected:
-	UPROPERTY(EditAnywhere)
-	TSoftObjectPtr<UInputMappingContext> InputMapping;
-	
-	UPROPERTY(EditAnywhere)
-	TObjectPtr<UInputConfigData> InputConfig;
-	
-	UPROPERTY()
-	UEnhancedInputComponent* InputComp; 
 	
 	void OnMove(const FInputActionValue& Value);
 	
@@ -45,4 +35,21 @@ protected:
 	void OnDodge(const FInputActionValue& Value);
 	
 	void OnBlock(const FInputActionValue& Value);
+public:
+	
+protected:
+	UPROPERTY(EditAnywhere, meta = (Category="Input"))
+	TSoftObjectPtr<UInputMappingContext> InputMapping;
+	
+	UPROPERTY(EditAnywhere, meta = (Category="Input"))
+	TObjectPtr<UInputConfigData> InputConfig;
+	
+	UPROPERTY(EditAnywhere, meta = (Category="PlayerActor"))
+	TSubclassOf<AHunterActor> HunterActorClass {nullptr};
+	
+	UPROPERTY()
+	UEnhancedInputComponent* InputComp {nullptr}; 
+	
+	UPROPERTY()
+	TObjectPtr<AHunterActor> HunterActor {nullptr};
 };
