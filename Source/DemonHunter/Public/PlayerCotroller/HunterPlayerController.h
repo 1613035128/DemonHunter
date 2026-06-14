@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "HunterCameraManager.h"
 #include "InputMappingContext.h"
 #include "Data/InputConfigData.h"
 #include "GameFramework/PlayerController.h"
@@ -17,6 +18,7 @@ class DEMONHUNTER_API AHunterPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 public:
+	TWeakObjectPtr<UInputConfigData> GetInputConfig() {return InputConfig;};
 protected:
 	virtual void BeginPlay() override;
 	
@@ -24,7 +26,10 @@ protected:
 	
 	void InitInput();
 	
-	void OnMove(const FInputActionValue& Value);
+	void OnMoveStart(const FInputActionValue& Value);
+	void OnMoveEnd(const FInputActionValue& Value);
+	
+	void OnViewRotate(const FInputActionValue& Value);
 	
 	void OnLook(const FInputActionValue& Value);
 	
@@ -39,7 +44,7 @@ public:
 	
 protected:
 	UPROPERTY(EditAnywhere, meta = (Category="Input"))
-	TSoftObjectPtr<UInputMappingContext> InputMapping;
+	TObjectPtr<UInputMappingContext> InputMapping;
 	
 	UPROPERTY(EditAnywhere, meta = (Category="Input"))
 	TObjectPtr<UInputConfigData> InputConfig;
@@ -52,4 +57,7 @@ protected:
 	
 	UPROPERTY()
 	TObjectPtr<AHunterActor> HunterActor {nullptr};
+	
+	UPROPERTY()
+	TWeakObjectPtr<AHunterCameraManager> HunterCameraManager;
 };

@@ -8,17 +8,17 @@
 
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class DEMONHUNTER_API UInputCommandComponent : public UActorComponent
+class DEMONHUNTER_API UInputCommandComponent : public UPrimitiveComponent
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this component's properties
 	UInputCommandComponent();
-
-protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+protected:
 
 public:
 	// Called every frame

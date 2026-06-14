@@ -1,10 +1,11 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "PlayerCotroller/HunterPlayerController.h"
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "PlayerCotroller/HunterCameraManager.h"
 
 void AHunterPlayerController::BeginPlay()
 {
@@ -18,6 +19,11 @@ void AHunterPlayerController::BeginPlay()
 		HunterActor = GetWorld()->SpawnActor<AHunterActor>(HunterActorClass);
 	}
 	
+	if (!HunterCameraManager.IsValid())
+	{
+		HunterCameraManager = MakeWeakObjectPtr<>(AHunterCameraManager::GetInstance());
+		HunterCameraManager->SetMainActor(MakeWeakObjectPtr(HunterActor));
+	}
 }
 
 void AHunterPlayerController::SetupInputComponent()
@@ -35,7 +41,8 @@ void AHunterPlayerController::InitInput()
 {
 	if (InputConfig->MoveAction)
 	{
-		InputComp->BindAction(InputConfig->MoveAction, ETriggerEvent::Triggered, this, &AHunterPlayerController::OnMove);
+		InputComp->BindAction(InputConfig->MoveAction, ETriggerEvent::Started, this, &AHunterPlayerController::OnMoveStart);
+		InputComp->BindAction(InputConfig->MoveAction, ETriggerEvent::Completed, this, &AHunterPlayerController::OnMoveEnd);
 	}
 	
 	if (InputConfig->LookAction)
@@ -62,34 +69,55 @@ void AHunterPlayerController::InitInput()
 	{
 		InputComp->BindAction(InputConfig->BlockAction, ETriggerEvent::Triggered, this, &AHunterPlayerController::OnBlock);
 	}
+
+	if (InputConfig->ViewRotateAction)
+	{
+		InputComp->BindAction(InputConfig->ViewRotateAction, ETriggerEvent::Triggered, this, &AHunterPlayerController::OnViewRotate);
+	}
 }
 
-void AHunterPlayerController::OnMove(const FInputActionValue& Value)
+void AHunterPlayerController::OnMoveStart(const FInputActionValue& Value)
 {
-	UE_LOG(LogInput, Display, TEXT("Move : %f, %f"), Value.Get<FVector2D>().X, Value.Get<FVector2D>().Y);
+	if (!HunterActor)
+		return;
+	
+	HunterActor->SetMovement(Value.Get<FVector2D>());
+}
+
+void AHunterPlayerController::OnMoveEnd(const FInputActionValue& Value)
+{
+	HunterActor->SetMovement(FVector2D::Zero());
+}
+
+void AHunterPlayerController::OnViewRotate(const FInputActionValue& Value)
+{
+	if (!HunterCameraManager.IsValid())
+		return;
+
+	HunterCameraManager->SetRotate(Value.Get<FVector2D>());
 }
 
 void AHunterPlayerController::OnLook(const FInputActionValue& Value)
 {
-	UE_LOG(LogInput, Display, TEXT("Look : %f"), Value.Get<float>());
+	UE_LOG(LogTemp, Warning, TEXT("[PC] >>> OnLook FIRED: %f"), Value.Get<float>());
 }
 
 void AHunterPlayerController::OnLightAttack(const FInputActionValue& Value)
 {
-	UE_LOG(LogInput, Display, TEXT("LightAttack : %f"), Value.Get<float>());
+	UE_LOG(LogTemp, Warning, TEXT("[PC] >>> OnLightAttack FIRED: %f"), Value.Get<float>());
 }
 
 void AHunterPlayerController::OnHeavyAttack(const FInputActionValue& Value)
 {
-	UE_LOG(LogInput, Display, TEXT("HeavyAttack : %f"), Value.Get<float>());
+	UE_LOG(LogTemp, Warning, TEXT("[PC] >>> OnHeavyAttack FIRED: %f"), Value.Get<float>());
 }
 
 void AHunterPlayerController::OnDodge(const FInputActionValue& Value)
 {
-	UE_LOG(LogInput, Display, TEXT("Dodge : %f"), Value.Get<float>());
+	UE_LOG(LogTemp, Warning, TEXT("[PC] >>> OnDodge FIRED: %f"), Value.Get<float>());
 }
 
 void AHunterPlayerController::OnBlock(const FInputActionValue& Value)
 {
-	UE_LOG(LogInput, Display, TEXT("Block : %f"), Value.Get<float>());
+	UE_LOG(LogTemp, Warning, TEXT("[PC] >>> OnBlock FIRED: %f"), Value.Get<float>());
 }

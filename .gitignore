@@ -1,0 +1,14 @@
+# Unreal Engine generated files
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+
+# IDE files
+.vs/
+.idea/
+*.DotSettings.user
+
+# OS files
+.DS_Store
+Thumbs.db
